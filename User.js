@@ -16,10 +16,11 @@ class User {
         try {
             const admin = await this.getUserById(process.env.ADMIN)
             if (admin) {
-                this.saveUser(admin.id, true, admin.name, admin.path, admin.menuButtons, admin.filesButtons)
+                // this.saveUser(admin.id, true, admin.name, admin.path, admin.menuButtons, admin.filesButtons)
                 return true
             } else {
                 await this.saveUser(process.env.ADMIN, true, 'name', '../data')
+                return true
             }
         } catch (error) {
             console.log(error)

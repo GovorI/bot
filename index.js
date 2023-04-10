@@ -31,22 +31,24 @@ bot.catch((err, ctx) => {
 })
 
 const commands = [{
-        command: 'start',
-        description: 'Начать работу с ботом'
-    },
-    {
-        command: 'admin',
-        description: 'Меню администратора'
-    }
+    command: 'start',
+    description: 'Начать работу с ботом'
+},
+{
+    command: 'admin',
+    description: 'Меню администратора'
+}
 ]
 
 bot.telegram.setMyCommands(commands)
 
-bot.command('/start', ctx => ctx.scene.enter('start'))
+bot.command('/start', async ctx => {
+    ctx.scene.enter('start')
+})
 bot.command('/admin', async ctx => {
     const id = Number(ctx.update.message.from.id)
     const user = await User.getUserById(id)
-    if(user.isAdmin){
+    if (user.isAdmin) {
         ctx.scene.enter('admin')
     }
 })

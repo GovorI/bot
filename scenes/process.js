@@ -42,11 +42,8 @@ process.on('text', async ctx => {
                 ctx.scenes.enter('process')
             }
             break
-    }
-    try {
-        await action(ctx, id, text, user, name)
-    } catch (error) {
-        console.log(error)
+        default:
+            await action(ctx, id, text, user, name)
     }
 })
 
@@ -70,7 +67,5 @@ async function action(ctx, id, text, user, name) {
         ctx.reply('чтобы начать нажмите /start ')
     }
 }
-
-
 
 module.exports = process
