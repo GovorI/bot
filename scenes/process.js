@@ -15,12 +15,16 @@ const {
 const process = new Scenes.BaseScene('process')
 
 process.enter(async ctx => {
-    const name = ctx.update.message.from.first_name
-    const id = Number(ctx.update.message.from.id)
-    const user = await User.getUserById(id)
-    const btn = await createButtons(path.join(__dirname, '../', 'data'))
-    viewButtons(ctx, btn.menuButtons, btn.filesButtons)
-    User.saveUser(id, user.isAdmin, name, '../data', btn.menuButtons, btn.filesButtons)
+    try {
+        const name = ctx.update.message.from.first_name
+        const id = Number(ctx.update.message.from.id)
+        const user = await User.getUserById(id)
+        const btn = await createButtons(path.join(__dirname, '../', 'data'))
+        viewButtons(ctx, btn.menuButtons, btn.filesButtons)
+        User.saveUser(id, user.isAdmin, name, '../data', btn.menuButtons, btn.filesButtons)
+    } catch (error) {
+        console.log(error) //было console.lon
+    }
 
 
 })
@@ -32,14 +36,14 @@ process.on('text', async ctx => {
 
     switch (text) {
         case '/start':
-            ctx.scene.enter('start')
+           await ctx.scene.enter('start')
             break
         case '/admin':
             if (user.isAdmin) {
                 ctx.scene.enter('admin')
             } else {
                 ctx.reply('У вас нет прав администратора')
-                ctx.scenes.enter('process')
+            await ctx.scene.enter('process')  // было ctx.scenes
             }
             break
         default:
@@ -49,7 +53,7 @@ process.on('text', async ctx => {
 
 process.on('callback_query', async ctx => {
     const fileId = ctx.update.callback_query.data
-    sendFile(ctx, fileId)
+    await sendFile(ctx, fileId)
 })
 
 async function action(ctx, id, text, user, name) {
