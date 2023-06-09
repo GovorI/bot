@@ -21,9 +21,9 @@ process.enter(async ctx => {
         const user = await User.getUserById(id)
         const btn = await createButtons(path.join(__dirname, '../', 'data'))
         viewButtons(ctx, btn.menuButtons, btn.filesButtons)
-        User.saveUser(id, user.isAdmin, name, '../data', btn.menuButtons, btn.filesButtons)
+        User.saveUser(id, user.isAdmin, name, path.join(__dirname, '../', 'data'), btn.menuButtons, btn.filesButtons)
     } catch (error) {
-        console.log(error) //было console.lon
+        console.log(error)
     }
 
 
@@ -43,7 +43,7 @@ process.on('text', async ctx => {
                 ctx.scene.enter('admin')
             } else {
                 ctx.reply('У вас нет прав администратора')
-            await ctx.scene.enter('process')  // было ctx.scenes
+            await ctx.scene.enter('process') 
             }
             break
         default:

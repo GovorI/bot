@@ -17,6 +17,7 @@ function getFiles(path, files_) {
 }
 
 async function createButtons(_path) {
+    console.log('path --->'+_path)
     let files = await getFiles(_path)
     let menuButtons = []
     let filesButtons = []
@@ -76,22 +77,22 @@ async function sendFile(ctx, fileId) {
     try {
         let button = await buttons[fileId]
         let ext = button[0].text.split('.')[1]
-        let path = user.path.toString()
-        path += '/' + button[0].text.toString()
+        let filePath = user.path.toString()
+        filePath = path.join(filePath, button[0].text.toString())
         if (ext === ('mp4' || 'avi')) {
             ctx.reply('Загрузка видео...')
-            const video = fs.createReadStream(path)
-            await ctx.telegram.sendVideo(ctx.chat.id, {
+            const video = fs.createReadStream(filePath)
+             await ctx.telegram.sendVideo(ctx.chat.id, {
                 source: video
             })
         } else {
-            ctx.replyWithDocument({
-                source: path,
+             ctx.replyWithDocument({
+                source: filePath,
                 filename: button[0].text.toString()
             });
 
         }
-        console.log(`Пользователь: ${user.id} ${user.name} ${user.isAdmin ? 'admin' : 'user'} получил файл: ${path}`)
+        console.log(`Пользователь: ${user.id} ${user.name} ${user.isAdmin ? 'admin' : 'user'} получил файл: ${filePath}`)
     } catch (error) {
         console.log(error)
         ctx.reply('Ошибка загрузки файла, попробуйте снова')
